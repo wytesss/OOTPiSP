@@ -1,5 +1,5 @@
 using System.Drawing;
-
+// TREUGOLKA
 namespace Lab1
 {
     public class Triangle : Shape

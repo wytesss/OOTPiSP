@@ -1,5 +1,5 @@
 using System.Drawing;
-
+// OTREZOK  
 namespace Lab1
 {
     public class Line : Shape

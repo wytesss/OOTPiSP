@@ -1,5 +1,5 @@
 using System.Drawing;
-
+// ELLIPS VPISAN V PRYAMOUGOLNIK
 namespace Lab1
 {
     public class EllipseShape : Shape

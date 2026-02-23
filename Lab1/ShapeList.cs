@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
-
+// SPISOK
 namespace Lab1
 {
     public class ShapeList
@@ -16,7 +16,7 @@ namespace Lab1
         {
             foreach (var shape in shapes)
             {
-                shape.Draw(g);  // œŒÀ»ÃŒ–‘»«Ã
+                shape.Draw(g);  // TIPO POLYMORPHISM
             }
         }
     }

@@ -1,5 +1,5 @@
 using System.Drawing;
-
+// NASLEDOVANIYE
 namespace Lab1
 {
     public abstract class Shape
@@ -11,7 +11,7 @@ namespace Lab1
             Color = color;
         }
 
-        // бхпрсюкэмши лернд
+        // VIRTUALNIY METOD
         public abstract void Draw(Graphics g);
     }
 }

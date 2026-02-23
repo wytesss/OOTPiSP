@@ -1,5 +1,5 @@
 using System.Drawing;
-
+// PRYAMOUGOLNIK
 namespace Lab1
 {
     public class RectangleShape : Shape

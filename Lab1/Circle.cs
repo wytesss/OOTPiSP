@@ -1,5 +1,5 @@
 using System.Drawing;
-//  –”√
+// KRUG
 namespace Lab1
 {
     public class Circle : Shape
