@@ -12,7 +12,7 @@ namespace Lab1
         {
             InitializeComponent();
 
-            // Статическая инициализация фигур
+            // INICIALIZACIA FIGURES
             shapeList.Add(new Line(new Point(10, 10), new Point(200, 50), Color.Red));
             shapeList.Add(new RectangleShape(new Rectangle(50, 70, 100, 60), Color.Blue));
             shapeList.Add(new EllipseShape(new Rectangle(200, 70, 100, 60), Color.Green));
