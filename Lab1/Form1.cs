@@ -13,15 +13,14 @@ namespace Lab1
             InitializeComponent();
 
             // INICIALIZACIA FIGURES
-            shapeList.Add(new Line(new Point(10, 10), new Point(200, 50), Color.Red));
-            shapeList.Add(new RectangleShape(new Rectangle(50, 70, 100, 60), Color.Blue));
-            shapeList.Add(new EllipseShape(new Rectangle(200, 70, 100, 60), Color.Green));
-            shapeList.Add(new Circle(new Point(150, 200), 40, Color.Purple));
-            shapeList.Add(new Triangle(
-                new Point(300, 150),
-                new Point(350, 250),
-                new Point(250, 250),
-                Color.Orange));
+            shapeList.Add(new Line(new Point(500, 60), new Point(720, 190), Color.Red));
+            shapeList.Add(new RectangleShape(new Rectangle(30, 70, 250, 100), Color.Blue));
+            shapeList.Add(new EllipseShape(new Rectangle(95, 230, 300, 140), Color.Green));
+            shapeList.Add(new Circle(new Point(390, 130), 90, Color.Purple));
+            shapeList.Add(new Triangle(new Point(550, 150),
+                                       new Point(420, 250),
+                                       new Point(600, 400),
+                                       Color.Orange));
         }
 
         protected override void OnPaint(PaintEventArgs e)
