@@ -1,0 +1,16 @@
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\bin\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.exe
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\bin\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.deps.json
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\bin\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.runtimeconfig.json
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\bin\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.dll
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\bin\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.pdb
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.GeneratedMSBuildEditorConfig.editorconfig
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.AssemblyInfoInputs.cache
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.AssemblyInfo.cs
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.csproj.CoreCompileInputs.cache
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.dll
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\refint\OOP_Lab2_GraphicEditor.dll
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.pdb
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.genruntimeconfig.cache
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\ref\OOP_Lab2_GraphicEditor.dll
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.MainForm.resources
+E:\University\OOP lab2\OOP_Lab2_GraphicEditor\obj\Debug\net6.0-windows\OOP_Lab2_GraphicEditor.csproj.GenerateResource.cache
