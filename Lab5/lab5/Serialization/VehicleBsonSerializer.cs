@@ -63,10 +63,12 @@ namespace lab5.Serialization
         public static byte[] SerializeItems(IList<Vehicle> vehicles)
         {
             EnsureRootConfigured();
-            using var stream = new MemoryStream();
-            using var writer = new BsonBinaryWriter(stream);
-            BsonSerializer.Serialize(writer, vehicles);
-            return stream.ToArray();
+            // Создаём документ с одним полем "items", содержащим массив
+            var doc = new BsonDocument
+            {
+                { "items", new BsonArray(vehicles.Select(v => v.ToBsonDocument())) }
+            };
+            return doc.ToBson();
         }
 
         public static List<Vehicle> DeserializeItems(byte[] payload)
@@ -75,9 +77,16 @@ namespace lab5.Serialization
             if (payload.Length == 0)
                 return new List<Vehicle>();
 
-            using var stream = new MemoryStream(payload);
-            using var reader = new BsonBinaryReader(stream);
-            return BsonSerializer.Deserialize<List<Vehicle>>(reader);
+            // Десериализуем документ
+            var doc = BsonSerializer.Deserialize<BsonDocument>(payload);
+            // Извлекаем массив по ключу "items"
+            var bsonArray = doc["items"].AsBsonArray;
+            var vehicles = new List<Vehicle>(bsonArray.Count);
+            foreach (var item in bsonArray)
+            {
+                vehicles.Add(BsonSerializer.Deserialize<Vehicle>(item.AsBsonDocument));
+            }
+            return vehicles;
         }
 
         /// <summary>
