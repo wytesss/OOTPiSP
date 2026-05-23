@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>lab6</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.28.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\lab6.Contracts\lab6.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\lab6.Plugin.Motorcycle\lab6.Plugin.Motorcycle.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\lab6.Plugin.Checksum\lab6.Plugin.Checksum.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\lab6.Plugin.SaveTimestamp\lab6.Plugin.SaveTimestamp.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\lab6.Plugin.XorCryptoAdapter\lab6.Plugin.XorCryptoAdapter.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="CopyPlugins" AfterTargets="Build">
+    <PropertyGroup>
+      <MotorcyclePluginPath>$(MSBuildThisFileDirectory)..\lab6.Plugin.Motorcycle\bin\$(Configuration)\net9.0\</MotorcyclePluginPath>
+      <ChecksumPluginPath>$(MSBuildThisFileDirectory)..\lab6.Plugin.Checksum\bin\$(Configuration)\net9.0\</ChecksumPluginPath>
+      <TimestampPluginPath>$(MSBuildThisFileDirectory)..\lab6.Plugin.SaveTimestamp\bin\$(Configuration)\net9.0\</TimestampPluginPath>
+      <AdapterPluginPath>$(MSBuildThisFileDirectory)..\lab6.Plugin.XorCryptoAdapter\bin\$(Configuration)\net9.0\</AdapterPluginPath>
+      <FriendSourceDir>$(MSBuildThisFileDirectory)..\friend\</FriendSourceDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <PluginDlls Include="$(MotorcyclePluginPath)lab6.Plugin.Motorcycle.dll" />
+      <PluginDlls Include="$(ChecksumPluginPath)lab6.Plugin.Checksum.dll" />
+      <PluginDlls Include="$(TimestampPluginPath)lab6.Plugin.SaveTimestamp.dll" />
+      <PluginDlls Include="$(AdapterPluginPath)lab6.Plugin.XorCryptoAdapter.dll" />
+      <PluginDlls Include="$(MotorcyclePluginPath)lab6.Contracts.dll" />
+      <PluginDlls Include="$(ChecksumPluginPath)lab6.Contracts.dll" />
+      <PluginDlls Include="$(TimestampPluginPath)lab6.Contracts.dll" />
+      <PluginDlls Include="$(AdapterPluginPath)lab6.Contracts.dll" />
+      <FriendDlls Include="$(FriendSourceDir)XorCryptoPlugin.dll" />
+      <FriendDlls Include="$(FriendSourceDir)Lab5_OOP.Contracts.dll" />
+    </ItemGroup>
+    <MakeDir Directories="$(TargetDir)Plugins" />
+    <MakeDir Directories="$(TargetDir)Plugins\Friend" />
+    <Copy SourceFiles="@(PluginDlls)" DestinationFolder="$(TargetDir)Plugins\" SkipUnchangedFiles="true" Condition="Exists('%(PluginDlls.Identity)')" />
+    <Copy SourceFiles="@(FriendDlls)" DestinationFolder="$(TargetDir)Plugins\Friend\" SkipUnchangedFiles="true" Condition="Exists('%(FriendDlls.Identity)')" />
+  </Target>
+
+</Project>

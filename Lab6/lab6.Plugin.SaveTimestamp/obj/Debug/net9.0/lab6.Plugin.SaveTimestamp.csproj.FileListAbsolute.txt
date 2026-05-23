@@ -1,0 +1,15 @@
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\bin\Debug\net9.0\lab6.Plugin.SaveTimestamp.deps.json
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\bin\Debug\net9.0\lab6.Plugin.SaveTimestamp.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\bin\Debug\net9.0\lab6.Plugin.SaveTimestamp.pdb
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\bin\Debug\net9.0\lab6.Contracts.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\bin\Debug\net9.0\lab6.Contracts.pdb
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.csproj.AssemblyReference.cache
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.GeneratedMSBuildEditorConfig.editorconfig
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.AssemblyInfoInputs.cache
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.AssemblyInfo.cs
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.csproj.CoreCompileInputs.cache
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plu.11C5C6F9.Up2Date
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\refint\lab6.Plugin.SaveTimestamp.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\lab6.Plugin.SaveTimestamp.pdb
+d:\University\OOP\OOP lab6\lab6.Plugin.SaveTimestamp\obj\Debug\net9.0\ref\lab6.Plugin.SaveTimestamp.dll

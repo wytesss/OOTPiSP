@@ -1,0 +1,15 @@
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\bin\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.deps.json
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\bin\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\bin\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.pdb
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\bin\Debug\net9.0\lab6.Contracts.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\bin\Debug\net9.0\lab6.Contracts.pdb
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.csproj.AssemblyReference.cache
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.GeneratedMSBuildEditorConfig.editorconfig
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.AssemblyInfoInputs.cache
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.AssemblyInfo.cs
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.csproj.CoreCompileInputs.cache
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plu.04713C4D.Up2Date
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\refint\lab6.Plugin.XorCryptoAdapter.dll
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\lab6.Plugin.XorCryptoAdapter.pdb
+d:\University\OOP\OOP lab6\lab6.Plugin.XorCryptoAdapter\obj\Debug\net9.0\ref\lab6.Plugin.XorCryptoAdapter.dll

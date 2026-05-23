@@ -1,0 +1,11 @@
+d:\University\OOP\OOP lab6\lab6.Contracts\bin\Debug\net9.0\lab6.Contracts.deps.json
+d:\University\OOP\OOP lab6\lab6.Contracts\bin\Debug\net9.0\lab6.Contracts.dll
+d:\University\OOP\OOP lab6\lab6.Contracts\bin\Debug\net9.0\lab6.Contracts.pdb
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\lab6.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\lab6.Contracts.AssemblyInfoInputs.cache
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\lab6.Contracts.AssemblyInfo.cs
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\lab6.Contracts.csproj.CoreCompileInputs.cache
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\lab6.Contracts.dll
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\refint\lab6.Contracts.dll
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\lab6.Contracts.pdb
+d:\University\OOP\OOP lab6\lab6.Contracts\obj\Debug\net9.0\ref\lab6.Contracts.dll

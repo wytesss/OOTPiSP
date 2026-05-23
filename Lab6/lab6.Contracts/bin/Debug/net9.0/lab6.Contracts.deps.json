@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "lab6.Contracts/1.0.0": {
+        "runtime": {
+          "lab6.Contracts.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "lab6.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

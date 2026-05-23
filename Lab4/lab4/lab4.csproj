@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>lab4</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.28.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\lab4.Contracts\lab4.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\lab4.Plugin.Motorcycle\lab4.Plugin.Motorcycle.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="CopyPlugins" AfterTargets="Build">
+  <PropertyGroup>
+    <PluginOutputPath>$(MSBuildThisFileDirectory)..\lab4.Plugin.Motorcycle\bin\$(Configuration)\net9.0\</PluginOutputPath>
+  </PropertyGroup>
+    <ItemGroup>
+      <PluginDlls Include="$(PluginOutputPath)lab4.Plugin.Motorcycle.dll" />
+      <PluginDlls Include="$(PluginOutputPath)lab4.Contracts.dll" />
+    </ItemGroup>
+    <MakeDir Directories="$(TargetDir)Plugins" />
+    <Copy SourceFiles="@(PluginDlls)" DestinationFolder="$(TargetDir)Plugins\" SkipUnchangedFiles="true" Condition="Exists('%(PluginDlls.Identity)')" />
+  </Target>
+
+</Project>

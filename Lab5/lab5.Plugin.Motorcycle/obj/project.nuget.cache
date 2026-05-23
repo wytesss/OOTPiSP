@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "6AYlcFqEwzI=",
+  "success": true,
+  "projectFilePath": "d:\\University\\OOP\\OOP lab5\\lab5.Plugin.Motorcycle\\lab5.Plugin.Motorcycle.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\-\\.nuget\\packages\\microsoft.visualbasic\\10.3.0\\microsoft.visualbasic.10.3.0.nupkg.sha512",
+    "C:\\Users\\-\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.14\\microsoft.netcore.app.ref.9.0.14.nupkg.sha512",
+    "C:\\Users\\-\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.14\\microsoft.windowsdesktop.app.ref.9.0.14.nupkg.sha512",
+    "C:\\Users\\-\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.14\\microsoft.aspnetcore.app.ref.9.0.14.nupkg.sha512"
+  ],
+  "logs": []
+}

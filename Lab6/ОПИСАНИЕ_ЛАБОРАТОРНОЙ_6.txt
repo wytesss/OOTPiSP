@@ -1,0 +1,310 @@
+================================================================================
+  ЛАБОРАТОРНАЯ РАБОТА 6 — ОПИСАНИЕ ДЛЯ НАЧИНАЮЩЕГО
+  Папка: OOP lab6
+  Основа: лабораторная 5 (OOP lab5)
+================================================================================
+
+Содержание:
+  1. Что требовалось по заданию
+  2. Плагин товарища и папка friend
+  3. Паттерн «Адаптер» — как подключён XorCrypto
+  4. Два новых паттерна в lab6 (Адаптер + Фасад)
+  5. Паттерны «Реестр» и «Фабрика» (lab5 и lab6)
+  6. Структура папок и проектов
+  7. Как всё связано при запуске
+  8. Сохранение с XOR и checksum — порядок шагов
+  9. Меню, настройки, загрузка DLL
+  10. Шпаргалка по файлам
+  11. Итог для защиты
+
+
+================================================================================
+1. ЧТО ТРЕБОВАЛОСЬ ПО ЗАДАНИЮ
+================================================================================
+
+  • Взять за основу лабораторную 5 (плагины типов ТС и обработки save/load).
+
+  • Обменяться с товарищем функциональным плагином (минимум одним) и
+    встроить его через паттерн Адаптер — в host появляется «свой» плагин
+    обработки, внутри которого вызывается чужой API.
+
+  • Реализовать ещё 2 паттерна (любых), пояснив уместность.
+    В проекте: Адаптер (обязательно по заданию) + Фасад (упрощение UI).
+
+  • Описать, где в коде используются паттерны Реестр и Фабрика
+    (они уже были в lab5 и сохранены в lab6).
+
+
+================================================================================
+2. ПЛАГИН ТОВАРИЩА И ПАПКА friend
+================================================================================
+
+В OOP lab6/friend/ лежат DLL товарища (его лабораторная на других контрактах):
+
+  • Lab5_OOP.Contracts.dll  — интерфейс IFileCryptoPlugin (Encrypt/Decrypt)
+  • XorCryptoPlugin.dll     — XOR-шифрование байтов файла, PluginId = XorCipher
+
+Host НЕ загружает XorCryptoPlugin.dll напрямую в PluginLoader: у него другой
+контракт (не ISerializationProcessingPlugin). Вместо этого:
+
+  1) Сборка копирует friend/*.dll в bin/.../Plugins/Friend/
+  2) Наш lab6.Plugin.XorCryptoAdapter.dll регистрируется как обычный плагин
+  3) Адаптер внутри подгружает XorCryptoPlugin из Plugins/Friend/
+
+
+================================================================================
+3. ПАТТЕРН «АДАПТЕР» — КАК ПОДКЛЮЧЁН XORCRYPTO
+================================================================================
+
+Теория:
+  Адаптер переводит один интерфейс в другой, чтобы несовместимые модули
+  работали вместе без переписывания чужого кода.
+
+Практика:
+
+  «Клиент» (наш host) ожидает:
+    ISerializationProcessingPlugin
+      ProcessBeforeSave / ProcessAfterLoad
+      ProcessingTypeId, DisplayName
+
+  «Адаптируемый» (товарищ) предоставляет:
+    IFileCryptoPlugin
+      Encrypt(byte[]) / Decrypt(byte[])
+
+  Адаптер: lab6.Plugin.XorCryptoAdapter/XorCryptoAdapterPlugin.cs
+    • ProcessBeforeSave → FriendPluginHost.Encrypt(ItemsPayload)
+    • перед десериализацией → Decrypt (интерфейс IItemsPayloadPreprocessor)
+    • в metadata пишется ключ xorCipher = XorCipher
+
+  Загрузка DLL товарища: FriendPluginHost.cs
+    • отдельный AssemblyLoadContext
+    • рефлексия: тип XorCryptoPlugin.XorCipherPlugin, вызов Encrypt/Decrypt
+
+Уместность:
+  Контракты lab5/lab6 и Lab5_OOP.Contracts разные; переписывать плагин друга
+  не нужно — достаточно тонкого адаптера в своей solution.
+
+
+================================================================================
+4. ДВА НОВЫХ ПАТТЕРНА В LAB6
+================================================================================
+
+┌─────────────┬──────────────────────────────────────────────────────────────┐
+│ Паттерн     │ Где в коде                    │ Зачем                        │
+├─────────────┼───────────────────────────────┼──────────────────────────────┤
+│ Адаптер     │ XorCryptoAdapterPlugin.cs     │ Подключить IFileCryptoPlugin │
+│             │ FriendPluginHost.cs           │ товарища к нашему pipeline   │
+├─────────────┼───────────────────────────────┼──────────────────────────────┤
+│ Фасад       │ Serialization/                │ Form1 не знает про BSON,     │
+│             │ VehiclePersistenceFacade.cs   │ реестр плагинов и AppSettings│
+│             │ Form1.cs использует _persist. │ — только Save() и Load()     │
+└─────────────┴───────────────────────────────┴──────────────────────────────┘
+
+Фасад уместен, потому что сохранение в lab5/lab6 — цепочка из нескольких
+шагов (сериализация, N плагинов, файл). UI должен вызывать одну операцию,
+а не тащить детали в каждую кнопку.
+
+
+================================================================================
+5. ПАТТЕРНЫ «РЕЕСТР» И «ФАБРИКА» (LAB5 И LAB6 — ОДИНАКОВО)
+================================================================================
+
+--- 5.1. Реестр (Registry) ---
+
+Теория:
+  Центральное место регистрации «типов по id» с последующим поиском.
+  Добавление новых элементов без изменения клиентского кода.
+
+Практика в lab5 и lab6:
+
+  A) VehicleTypeRegistry (lab5/Domain или lab6/Domain/VehicleTypeRegistry.cs)
+     • RegisterBuiltIn — встроенные Car, Bus, Truck, Van
+     • RegisterFromPlugin — типы из IVehiclePlugin (Motorcycle)
+     • Types — список для ComboBox на форме
+     • PluginLoader после загрузки DLL вызывает RegisterFromPlugin
+
+  B) SerializationPluginRegistry (Plugins/SerializationPluginRegistry.cs)
+     • Register(ISerializationProcessingPlugin) при загрузке DLL
+     • GetEnabled(ids) — только включённые в appsettings.json
+     • Используется в VehicleBsonSerializer при save/load
+
+--- 5.2. Фабрика (Factory) ---
+
+Теория:
+  Создание объектов без new КонкретныйКласс() в клиенте — через функцию
+  или метод «создай по идентификатору типа».
+
+Практика в lab5 и lab6:
+
+  A) VehicleTypeInfo.Factory (lab5.Contracts/Domain/Vehicle.cs)
+     • Поле Func<Vehicle> Factory у каждой записи реестра типов
+     • При регистрации передаётся лямбда: () => new Car(), () => new Motorcycle()
+
+  B) Form1.buttonAdd_Click (Form1.cs)
+     • Vehicle vehicle = info.Factory();
+     • UI не знает, Car это или Motorcycle — только вызывает фабрику из реестра
+
+  C) VehicleBootstrap (Domain/VehicleBootstrap.cs)
+     • Регистрирует встроенные фабрики: () => new Car() и т.д.
+
+  D) Плагин Motorcycle (MotorcyclePlugin.Register)
+     • В контекст передаёт factory: () => new Motorcycle()
+
+Итого для ответа преподавателю:
+  «Реестр — VehicleTypeRegistry и SerializationPluginRegistry.
+   Фабрика — Func<Vehicle> в VehicleTypeInfo, вызов info.Factory() в Form1.»
+
+
+================================================================================
+6. СТРУКТУРА ПАПОК И ПРОЕКТОВ
+================================================================================
+
+OOP lab6/
+│
+├── ОПИСАНИЕ_ЛАБОРАТОРНОЙ_6.txt          ← этот файл
+├── friend/                              ← DLL товарища (исходники обмена)
+│   ├── Lab5_OOP.Contracts.dll
+│   └── XorCryptoPlugin.dll
+│
+├── lab6.Contracts/
+├── lab6/                                ← WinForms host
+│   ├── Serialization/
+│   │   ├── VehicleBsonSerializer.cs
+│   │   └── VehiclePersistenceFacade.cs  ← Фасад
+│   ├── Plugins/
+│   └── Domain/
+│
+├── lab6.Plugin.Motorcycle/
+├── lab6.Plugin.Checksum/
+├── lab6.Plugin.SaveTimestamp/
+└── lab6.Plugin.XorCryptoAdapter/        ← Адаптер для плагина товарища
+    ├── XorCryptoAdapterPlugin.cs
+    └── FriendPluginHost.cs
+
+После сборки:
+  lab6/bin/Debug/net9.0-windows/
+    lab6.exe
+    Plugins/
+      lab6.Plugin.*.dll
+      lab6.Contracts.dll
+      Friend/
+        XorCryptoPlugin.dll
+        Lab5_OOP.Contracts.dll
+
+
+================================================================================
+7. КАК ВСЁ СВЯЗАНО ПРИ ЗАПУСКЕ
+================================================================================
+
+Шаг 1. Program.Main
+  • AppSettings.Load()
+  • по умолчанию включены: checksum, xor-cipher
+  • VehicleBootstrap.RegisterBuiltInTypes()
+  • PluginLoader.LoadAll() — в т.ч. lab6.Plugin.XorCryptoAdapter.dll
+
+Шаг 2. Form1
+  • VehiclePersistenceFacade для save/load
+  • ComboBox типов из VehicleTypeRegistry
+
+Шаг 3. Сохранение (через фасад)
+  • Serialize items → byte[]
+  • Плагины ProcessBeforeSave (порядок из appsettings):
+      checksum считает SHA256 от открытых байтов
+      xor-cipher шифрует ItemsPayload (адаптер → Encrypt товарища)
+  • Запись BSON: items + metadata (checksum, xorCipher, …)
+
+Шаг 4. Загрузка
+  • Чтение items из файла
+  • IItemsPayloadPreprocessor: xor-cipher расшифровывает ДО десериализации
+  • Deserialize List<Vehicle>
+  • ProcessAfterLoad: проверка checksum, сообщение об XOR
+
+Шаг 5. Настройки
+  • В списке галочек есть пункт от адаптера (имя с плагина товарища)
+
+
+================================================================================
+8. СОХРАНЕНИЕ С XOR И CHECKSUM — ПОРЯДОК
+================================================================================
+
+Важно: checksum должен считаться от НЕзашифрованных данных.
+
+При включённых checksum и xor-cipher (порядок в EnabledProcessingIds):
+
+  Сохранение:
+    1) itemsPayload = сериализация списка ТС
+    2) checksum: hash(itemsPayload) → metadata["checksum"]
+    3) xor-cipher: itemsPayload = Encrypt(itemsPayload), metadata["xorCipher"]
+
+  Загрузка:
+    1) прочитать зашифрованные bytes из items
+    2) xor-cipher: Decrypt → открытые bytes
+    3) десериализация в List<Vehicle>
+    4) checksum: сравнить hash(открытые bytes) с metadata["checksum"]
+
+Файл vehicles.bson (логически):
+  items     — бинарный блок (после XOR — шифротекст)
+  checksum  — hex SHA-256 от исходных (до XOR) байтов списка
+  xorCipher — метка "XorCipher" если применялось шифрование
+
+
+================================================================================
+9. МЕНЮ, НАСТРОЙКИ, ЗАГРУЗКА DLL
+================================================================================
+
+Как в lab5:
+  • Настройки → галочки только для загруженных ISerializationProcessingPlugin
+  • Плагины → загрузка DLL / перезагрузка из Plugins/
+  • appsettings.json: EnabledProcessingIds
+
+Дополнительно lab6:
+  • DLL товарища не кладут в корень Plugins/ — только в Plugins/Friend/
+  • в корне Plugins/ лежит только lab6.Plugin.XorCryptoAdapter.dll
+
+
+================================================================================
+10. ШПАРГАЛКА ПО ФАЙЛАМ
+================================================================================
+
+Вопрос                              │ Файл
+────────────────────────────────────┼──────────────────────────────────────
+Адаптер XOR товарища                │ lab6.Plugin.XorCryptoAdapter/
+                                    │   XorCryptoAdapterPlugin.cs
+Загрузка DLL товарища               │   FriendPluginHost.cs
+Фасад save/load                     │ lab6/Serialization/VehiclePersistenceFacade.cs
+Реестр типов ТС                     │ lab6/Domain/VehicleTypeRegistry.cs
+Реестр плагинов обработки           │ lab6/Plugins/SerializationPluginRegistry.cs
+Фабрика () => new Car()             │ VehicleTypeInfo + VehicleBootstrap + Form1
+Расшифровка до deserialize          │ IItemsPayloadPreprocessor + VehicleBsonSerializer
+Контрольная сумма                   │ lab6.Plugin.Checksum/
+Точка входа                         │ lab6/Program.cs
+DLL товарища (обмен)                │ OOP lab6/friend/
+
+
+================================================================================
+11. ИТОГ ДЛЯ ЗАЩИТЫ
+================================================================================
+
+Обязательно по заданию lab6:
+  ✓ База lab5 перенесена в lab6
+  ✓ Плагин товарища (XorCrypto) через Адаптер
+  ✓ Ещё один паттерн с пояснением — Фасад (VehiclePersistenceFacade)
+  ✓ Пояснение Реестра и Фабрики (раздел 5 этого файла)
+
+Паттерны в одном предложении:
+  • Адаптер — чужой IFileCryptoPlugin → наш ISerializationProcessingPlugin
+  • Фасад — Form1 → VehiclePersistenceFacade → serializer + плагины
+  • Реестр — VehicleTypeRegistry, SerializationPluginRegistry
+  • Фабрика — Func<Vehicle> Factory в VehicleTypeInfo, вызов в Form1
+
+Минимум для демонстрации:
+  1. Включить в настройках «XOR cipher» и checksum
+  2. Сохранить список ТС → закрыть → загрузить
+  3. Показать сообщения о checksum и расшифровке XOR
+  4. Показать Plugins/Friend/ и файл адаптера в solution
+
+
+================================================================================
+  Сборка:  dotnet build "OOP lab6\lab6\lab6.sln"
+  Запуск:  lab6\bin\Debug\net9.0-windows\lab6.exe
+================================================================================

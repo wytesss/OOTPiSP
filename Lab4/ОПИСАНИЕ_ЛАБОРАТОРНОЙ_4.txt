@@ -1,0 +1,455 @@
+================================================================================
+  ЛАБОРАТОРНАЯ РАБОТА 4 — ОПИСАНИЕ ДЛЯ НАЧИНАЮЩЕГО
+  Папка: OOP lab4 (на основе вашего проекта)
+================================================================================
+
+Содержание:
+  1. Что требовалось по заданию (8 баллов)
+  2. Теория: плагины, иерархия, рефлексия, сериализация с полиморфизмом
+  3. Структура папок и проектов
+  4. Как всё связано при запуске программы
+  5. Плагин типов (Motorcycle) — пошагово
+  6. Регистрация встроенных типов и реестр
+  7. Динамическая загрузка DLL (из папки / командной строки)
+  8. Сериализация с поддержкой дискриминаторов (MongoDB.Bson)
+  9. Пользовательский интерфейс (WinForms) и привязка данных
+  10. Шпаргалка по файлам (где что искать)
+  11. Итог для защиты / что можно улучшить
+
+
+================================================================================
+1. ЧТО ТРЕБОВАЛОСЬ ПО ЗАДАНИЮ (8 баллов — обязательно)
+================================================================================
+
+Своими словами:
+ц
+  • Взять за основу лабораторную 2 или 3 (иерархия транспортных средств).
+
+  • Расширить иерархию новыми классами с помощью динамической загрузки
+    модулей (плагинов). Новые модули должны:
+        — добавлять новый класс в иерархию;
+        — предоставлять функции для работы с ним (редактирование, отображение);
+        — автоматически интегрироваться в пользовательский интерфейс
+          (появляться в списке типов для добавления).
+
+  • Плагины загружаются либо из специальной папки (например, Plugins),
+    либо по имени модуля, переданному в командной строке (--plugin путь).
+
+  • Идеально: добавление нового модуля не должно требовать изменения кода
+    основной программы (просто кладём DLL в папку — и тип появляется).
+
+В вашем проекте реализовано именно это:
+  — Основная программа знает только о базовых классах (Vehicle, PassengerVehicle, CargoVehicle)
+    и встроенных типах (Car, Bus, Truck, Van).
+  — Плагин lab4.Plugin.Motorcycle.dll добавляет класс Motorcycle (наследник PassengerVehicle)
+    со своим полем HasSidecar, своей логикой редактирования (Edit) и представлением (GetInfo).
+  — Плагин регистрируется через интерфейс IVehiclePlugin, загружается динамически,
+    и его тип автоматически появляется в комбобоксе выбора типа.
+
+
+================================================================================
+2. ТЕОРИЯ (ПРОСТЫМИ СЛОВАМИ) И СВЯЗЬ С ПРАКТИКОЙ
+================================================================================
+
+--- 2.1. Иерархия классов и полиморфизм ---
+
+Теория: базовый класс определяет общий контракт (методы GetInfo, Edit),
+производные классы реализуют специфику. Полиморфизм позволяет работать
+с любым транспортным средством через ссылку на базовый класс.
+
+Практика:
+  - Vehicle — абстрактный, содержит Id, Name, Year, абстрактные GetInfo() и Edit().
+  - PassengerVehicle : Vehicle — добавляет PassengerCapacity.
+  - CargoVehicle : Vehicle — добавляет MaxLoadKg.
+  - Встроенные: Car, Bus, Truck, Van.
+  - Плагинный: Motorcycle : PassengerVehicle.
+
+--- 2.2. Что такое плагин и контракт? ---
+
+Теория: основная программа (host) не знает конкретные классы плагинов,
+но знает интерфейс, который те должны реализовать. Host загружает сборку,
+находит типы, реализующие интерфейс, и вызывает их методы.
+
+Практика:
+  - Контракт (общая библиотека) — lab4.Contracts.dll.
+  - Интерфейс IVehiclePlugin: метод Register(VehiclePluginContext context).
+  - Плагин MotorcyclePlugin реализует этот интерфейс.
+  - Host через рефлексию находит все классы, реализующие IVehiclePlugin,
+    создаёт экземпляр и вызывает Register.
+
+--- 2.3. Рефлексия (Reflection) ---
+
+Теория: механизм, позволяющий во время выполнения исследовать структуру
+сборок, типов, создавать объекты по именам, вызывать методы.
+
+Практика (PluginLoader.cs):
+  Assembly assembly = Assembly.LoadFrom(dllPath);
+  var pluginTypes = assembly.GetTypes().Where(t => typeof(IVehiclePlugin).IsAssignableFrom(t));
+  IVehiclePlugin plugin = (IVehiclePlugin)Activator.CreateInstance(type);
+  plugin.Register(context);
+
+--- 2.4. Реестр типов (VehicleTypeRegistry) ---
+
+Теория: центральное хранилище, которое знает обо всех доступных типах
+(и встроенных, и плагинных). Каждый тип представлен фабрикой (Func<Vehicle>),
+которая умеет создавать экземпляр.
+
+Практика:
+  - RegisterBuiltIn("car", "Car", () => new Car())
+  - RegisterFromPlugin(pluginName, "motorcycle", "Motorcycle (plugin)", () => new Motorcycle())
+  - Типы используются для заполнения выпадающего списка и создания объектов.
+
+--- 2.5. Сериализация с полиморфизмом (MongoDB.Bson) ---
+
+Теория: при сохранении списка объектов базового класса нужно сохранить
+реальный тип каждого объекта. Используется дискриминатор — метка, указывающая,
+какой именно производный класс был сохранён.
+
+Практика (VehicleBsonSerializer.cs):
+  - Корневой класс Vehicle помечается как IsRootClass и получает дискриминатор "vehicle".
+  - Каждый производный класс регистрируется с уникальным дискриминатором
+    ("car", "bus", "truck", "van", "motorcycle").
+  - При десериализации BSON-драйвер читает дискриминатор и создаёт правильный тип.
+
+
+================================================================================
+3. СТРУКТУРА ПАПОК И ПРОЕКТОВ
+================================================================================
+
+OOP lab4/
+│
+├── lab4.Contracts/                      ← общие контракты (интерфейсы, базовые классы)
+│   ├── Domain/
+│   │   └── Vehicle.cs                   ← Vehicle, PassengerVehicle, CargoVehicle
+│   └── Plugins/
+│       ├── IVehiclePlugin.cs            ← интерфейс плагина
+│       └── VehiclePluginContext.cs      ← контекст для регистрации
+│
+├── lab4/                                ← главное WinForms-приложение
+│   ├── Program.cs                       ← точка входа
+│   ├── Form1.cs                         ← главное окно (список, кнопки)
+│   ├── Form1.Designer.cs                ← визуальные компоненты
+│   ├── Domain/
+│   │   ├── BuiltInVehicles.cs           ← Car, Bus, Truck, Van
+│   │   ├── VehicleTypeRegistry.cs       ← реестр типов
+│   │   └── VehicleBootstrap.cs          ← регистрация встроенных типов
+│   ├── Plugins/
+│   │   └── PluginLoader.cs              ← загрузка DLL, поиск IVehiclePlugin
+│   └── Serialization/
+│       └── VehicleBsonSerializer.cs     ← сохранение/загрузка BSON
+│
+└── lab4.Plugin.Motorcycle/              ← пример плагина (новый тип)
+    ├── Motorcycle.cs                    ← класс Motorcycle
+    └── MotorcyclePlugin.cs              ← реализация IVehiclePlugin
+
+После сборки (dotnet build) в папке:
+  lab4/bin/Debug/net9.0-windows/
+    lab4.exe
+    lab4.Contracts.dll
+    Plugins/
+      lab4.Plugin.Motorcycle.dll
+
+Примечание: папка Plugins создаётся вручную или через скрипт сборки.
+Программа ищет её рядом с exe-файлом.
+
+
+================================================================================
+4. КАК ВСЁ СВЯЗАНО ПРИ ЗАПУСКЕ (ПОШАГОВО)
+================================================================================
+
+Шаг 1. Program.Main
+  • VehicleBootstrap.RegisterBuiltInTypes() — регистрирует Car, Bus, Truck, Van
+    в VehicleTypeRegistry и в VehicleBsonSerializer (дискриминаторы).
+  • PluginLoader.LoadAll(args) — загружает плагины из папки Plugins и/или
+    из аргументов командной строки (например, --plugin MyPlugin.dll).
+  • Application.Run(new Form1()) — запуск главного окна.
+
+Шаг 2. Form1 при открытии
+  • Инициализирует привязку данных (BindingList<Vehicle> для ListBox).
+  • Загружает список машин из файла vehicles.bson (если есть) через
+    VehicleBsonSerializer.LoadFromFile.
+  • Заполняет комбобокс comboVehicleTypes типами из VehicleTypeRegistry.Types.
+  • Обновляет статус плагинов (labelPlugins) на основе VehicleTypeRegistry.LoadedPlugins.
+
+Шаг 3. Пользователь добавляет ТС
+  • Выбирает тип в ComboBox (например, "Car" или "Motorcycle (plugin)").
+  • По кнопке "Add" вызывается info.Factory(), создаётся объект.
+  • Вызывается vehicle.Edit() — открываются диалоги InputBox для ввода характеристик.
+  • Объект добавляется в список _vehicles (BindingList).
+
+Шаг 4. Редактирование / удаление
+  • Выделенный объект редактируется через vehicle.Edit() (полиморфизм).
+  • Удаление — _vehicles.Remove(selected).
+
+Шаг 5. Сохранение (Serialize)
+  • VehicleBsonSerializer.SaveToFile(FilePath, _vehicles.ToList()).
+
+Шаг 6. Загрузка (Deserialize)
+  • var loaded = VehicleBsonSerializer.LoadFromFile(FilePath);
+  • _vehicles.Clear(); foreach(var v in loaded) _vehicles.Add(v);
+
+Шаг 7. Перезагрузка плагинов (кнопка Reload plugins)
+  • Очищаем реестр типов (VehicleTypeRegistry.Clear()).
+  • Перерегистрируем встроенные типы.
+  • Заново загружаем плагины через PluginLoader.LoadAll().
+  • Обновляем комбобокс и статус.
+
+
+================================================================================
+5. ПЛАГИН ТИПОВ (Motorcycle) — ПОШАГОВО
+================================================================================
+
+Плагин — это отдельная DLL, которая ссылается на lab4.Contracts.
+
+--- Файл Motorcycle.cs ---
+[Serializable]
+public class Motorcycle : PassengerVehicle
+{
+    public bool HasSidecar { get; set; }
+
+    public override string GetInfo() => $"{Name}, year {Year}, seats {PassengerCapacity}, sidecar: {(HasSidecar ? "yes" : "no")}";
+
+    public override void Edit()
+    {
+        // Запрашиваем Name, Year через базовый EditCommon
+        // Запрашиваем PassengerCapacity через EditPassengerCapacity
+        // Запрашиваем HasSidecar через InputBox
+    }
+}
+
+--- Файл MotorcyclePlugin.cs ---
+public class MotorcyclePlugin : IVehiclePlugin
+{
+    public string Name => "Motorcycle plugin";
+
+    public void Register(VehiclePluginContext context)
+    {
+        // Регистрируем тип в реестре
+        context.RegisterVehicleType("motorcycle", "Motorcycle (plugin)", () => new Motorcycle());
+        // Регистрируем дискриминатор для сериализации
+        context.RegisterBsonType<Motorcycle>("motorcycle");
+    }
+}
+
+Что делает host при загрузке:
+  1) Загружает DLL.
+  2) Находит класс MotorcyclePlugin.
+  3) Создаёт экземпляр.
+  4) Вызывает Register, передавая контекст.
+  5) Контекст вызывает методы регистрации в реестре типов и в сериализаторе.
+
+После этого:
+  - В комбобоксе появляется "Motorcycle (plugin)".
+  - При выборе этого пункта фабрика () => new Motorcycle() создаст объект.
+  - Объекты Motorcycle корректно сохраняются и загружаются (благодаря RegisterBsonType).
+
+
+================================================================================
+6. РЕГИСТРАЦИЯ ВСТРОЕННЫХ ТИПОВ И РЕЕСТР
+================================================================================
+
+--- VehicleTypeRegistry.cs ---
+Статический класс, хранит список VehicleTypeInfo.
+
+  public static void RegisterBuiltIn(string id, string displayName, Func<Vehicle> factory)
+  {
+      Register(id, displayName, factory, "Built-in");
+  }
+
+  public static void RegisterFromPlugin(string pluginName, string id, string displayName, Func<Vehicle> factory)
+  {
+      Register(id, displayName, factory, pluginName);
+      _loadedPlugins.Add(pluginName);
+  }
+
+При регистрации проверяется уникальность id, чтобы не было конфликта.
+
+--- VehicleBootstrap.cs ---
+  RegisterBuiltInTypes() — вызывается в Program.Main.
+  Регистрирует Car, Bus, Truck, Van и их дискриминаторы.
+
+--- Почему реестр отдельно от UI? ---
+UI (Form1) просто привязывается к VehicleTypeRegistry.Types.
+Если добавить новый тип через плагин, комбобокс обновляется автоматически
+(после вызова RefreshVehicleTypes).
+
+
+================================================================================
+7. ДИНАМИЧЕСКАЯ ЗАГРУЗКА DLL (ИЗ ПАПКИ И КОМАНДНОЙ СТРОКИ)
+================================================================================
+
+Класс PluginLoader (файл lab4/Plugins/PluginLoader.cs).
+
+--- Автозагрузка из папки Plugins ---
+  string pluginsDir = Path.Combine(AppContext.BaseDirectory, "Plugins");
+  if (Directory.Exists(pluginsDir))
+  {
+      foreach (string dllPath in Directory.EnumerateFiles(pluginsDir, "*.dll"))
+      {
+          TryLoadAssembly(dllPath, errors, loadedAssemblies);
+      }
+  }
+
+--- Аргументы командной строки ---
+Поддерживаются --plugin или -p:
+  lab4.exe --plugin C:\MyPlugin.dll
+  lab4.exe -p MyPlugin.dll
+
+Если указано только имя (без пути), ищется сначала в текущей папке, затем в папке Plugins.
+
+--- Загрузка сборки и поиск плагинов ---
+  Assembly assembly = Assembly.LoadFrom(fullPath);
+  var pluginTypes = assembly.GetTypes().Where(t => typeof(IVehiclePlugin).IsAssignableFrom(t));
+
+  foreach (var type in pluginTypes)
+  {
+      var plugin = (IVehiclePlugin)Activator.CreateInstance(type);
+      var context = new VehiclePluginContext(
+          (id, displayName, factory) => VehicleTypeRegistry.RegisterFromPlugin(plugin.Name, id, displayName, factory),
+          (vehicleType, discriminator) => VehicleBsonSerializer.RegisterDerivedGeneric(vehicleType, discriminator)
+      );
+      plugin.Register(context);
+  }
+
+--- Обработка ошибок ---
+Исключения перехватываются и добавляются в список LoadErrors.
+Пользователь видит предупреждения, но программа продолжает работу.
+
+--- Кнопка "Reload plugins" в Form1 ---
+Очищает реестр, перерегистрирует встроенные типы, заново загружает плагины.
+Это демонстрирует, что добавление/удаление DLL в папку Plugins можно делать
+без перезапуска приложения (нажал кнопку — и новые типы появились).
+
+
+================================================================================
+8. СЕРИАЛИЗАЦИЯ С ПОДДЕРЖКОЙ ДИСКРИМИНАТОРОВ (MongoDB.Bson)
+================================================================================
+
+Класс VehicleBsonSerializer (lab4/Serialization/VehicleBsonSerializer.cs).
+
+--- Настройка корневого класса Vehicle ---
+  BsonClassMap.RegisterClassMap<Vehicle>(cm =>
+  {
+      cm.AutoMap();
+      cm.SetIsRootClass(true);
+      cm.SetDiscriminator("vehicle");
+  });
+
+--- Регистрация производных классов ---
+  public static void RegisterDerived<T>(string discriminator) where T : Vehicle
+  {
+      BsonClassMap.RegisterClassMap<T>(cm =>
+      {
+          cm.AutoMap();
+          cm.SetDiscriminator(discriminator);
+      });
+  }
+
+Пример: RegisterDerived<Motorcycle>("motorcycle")
+
+--- Формат файла vehicles.bson ---
+При сохранении создаётся BSON-документ:
+  {
+    "items": [ <объект Vehicle>, <объект Car>, ... ]
+  }
+
+Каждый объект внутри массива содержит поле "_t" (дискриминатор), например:
+  { "_t": "car", "Name": "Tesla", "Year": 2023, "PassengerCapacity": 5, "HasAirConditioning": true }
+
+При загрузке драйвер смотрит на "_t" и создаёт объект нужного типа.
+
+--- Совместимость с lab2/lab3 ---
+Файл сохраняется в том же формате, что и раньше (массив объектов). Поэтому
+старые файлы должны читаться (если в них нет полей, специфичных для новых типов,
+то они заполняются значениями по умолчанию).
+
+
+================================================================================
+9. ПОЛЬЗОВАТЕЛЬСКИЙ ИНТЕРФЕЙС (WINFORMS) И ПРИВЯЗКА ДАННЫХ
+================================================================================
+
+--- Form1.Designer.cs ---
+Содержит элементы:
+  - listVehicles (ListBox) — отображение списка
+  - buttonAdd, buttonEdit, buttonRemove
+  - buttonSave, buttonLoad
+  - comboVehicleTypes (ComboBox) — выбор типа для добавления
+  - labelPlugins — строка статуса
+  - buttonReloadPlugins
+
+--- Привязка данных ---
+  private readonly BindingList<Vehicle> _vehicles = new();
+  listVehicles.DataSource = _vehicles;
+
+BindingList автоматически уведомляет ListBox об изменениях (добавление, удаление,
+изменение). При вызове _vehicles.ResetItem(index) обновляется отображение после
+редактирования.
+
+--- Заполнение ComboBox ---
+  comboVehicleTypes.DataSource = VehicleTypeRegistry.Types.ToList();
+  comboVehicleTypes.DisplayMember = nameof(VehicleTypeInfo.DisplayName);
+
+Каждый элемент — VehicleTypeInfo. При выборе пользователь получает фабрику.
+
+--- Добавление нового объекта ---
+  Vehicle vehicle = info.Factory();
+  vehicle.Edit();                 // пользователь вводит данные через InputBox
+  _vehicles.Add(vehicle);
+
+--- Обновление UI при перезагрузке плагинов ---
+  RefreshVehicleTypes() — перепривязывает comboVehicleTypes.
+  UpdatePluginStatus() — обновляет labelPlugins (имена загруженных плагинов).
+
+
+================================================================================
+10. ШПАРГАЛКА: ГДЕ ЧТО ИСКАТЬ В КОДЕ
+================================================================================
+
+Вопрос                              │ Файл
+────────────────────────────────────┼──────────────────────────────────────
+С чего начинается программа         │ lab4/Program.cs
+Главное окно, кнопки                │ lab4/Form1.cs, Form1.Designer.cs
+Загрузка плагинов (DLL)             │ lab4/Plugins/PluginLoader.cs
+Реестр типов (список доступных ТС)  │ lab4/Domain/VehicleTypeRegistry.cs
+Встроенные типы (Car, Bus, Truck, Van) │ lab4/Domain/BuiltInVehicles.cs
+Базовые классы (Vehicle и др.)      │ lab4.Contracts/Domain/Vehicle.cs
+Интерфейс плагина                   │ lab4.Contracts/Plugins/IVehiclePlugin.cs
+Контекст регистрации                │ lab4.Contracts/Plugins/VehiclePluginContext.cs
+Сериализация (BSON)                 │ lab4/Serialization/VehicleBsonSerializer.cs
+Плагин Motorcycle (пример)          │ lab4.Plugin.Motorcycle/
+   - класс Motorcycle               │ Motorcycle.cs
+   - реализация плагина             │ MotorcyclePlugin.cs
+
+
+================================================================================
+11. ИТОГ ДЛЯ ЗАЩИТЫ / ЧТО МОЖНО УЛУЧШИТЬ
+================================================================================
+
+Обязательно по заданию (8 баллов):
+  ✓ Иерархия транспортных средств (Vehicle, PassengerVehicle, CargoVehicle).
+  ✓ Встроенные типы: Car, Bus, Truck, Van.
+  ✓ Динамическая загрузка плагинов из папки Plugins и по аргументам командной строки.
+  ✓ Плагин Motorcycle (или любой другой) добавляет новый класс, функции редактирования,
+    автоматически появляется в UI.
+  ✓ Сериализация/десериализация с поддержкой новых типов (BSON + дискриминаторы).
+  ✓ Перезагрузка плагинов без перезапуска (кнопка Reload plugins).
+
+Что можно улучшить (не требуется, но для себя):
+  - Добавить проверки на дублирование id при регистрации (уже есть).
+  - Вынести строковые константы (путь к папке Plugins) в конфигурацию.
+  - Реализовать более удобный интерфейс редактирования вместо InputBox (например, отдельную форму).
+  - Добавить поддержку плагинов, которые добавляют не только типы, но и новые пункты меню.
+  - Валидация вводимых данных (год, грузоподъёмность) с сообщениями об ошибках.
+
+Для сдачи достаточно:
+  - Показать, что при запуске программы в комбобоксе есть "Motorcycle (plugin)".
+  - Создать объект Motorcycle, заполнить его, сохранить в файл, перезагрузить — данные сохраняются.
+  - Показать код плагина и объяснить, как host его находит и регистрирует.
+  - Продемонстрировать перезагрузку плагинов (удалить/добавить DLL и нажать Reload plugins).
+
+
+================================================================================
+  Сборка:  dotnet build "OOP lab4\lab4.sln"
+  Запуск:  lab4\bin\Debug\net9.0-windows\lab4.exe
+  (Предварительно создайте папку Plugins и положите туда lab4.Plugin.Motorcycle.dll)
+================================================================================

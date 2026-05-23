@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "lab5.Plugin.SaveTimestamp/1.0.0": {
+        "dependencies": {
+          "lab5.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "lab5.Plugin.SaveTimestamp.dll": {}
+        }
+      },
+      "lab5.Contracts/1.0.0": {
+        "runtime": {
+          "lab5.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "lab5.Plugin.SaveTimestamp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "lab5.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

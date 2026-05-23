@@ -1,0 +1,55 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "lab4/1.0.0": {
+        "dependencies": {
+          "MongoDB.Bson": "2.28.0",
+          "lab4.Contracts": "1.0.0"
+        },
+        "runtime": {
+          "lab4.dll": {}
+        }
+      },
+      "MongoDB.Bson/2.28.0": {
+        "runtime": {
+          "lib/netstandard2.1/MongoDB.Bson.dll": {
+            "assemblyVersion": "2.28.0.0",
+            "fileVersion": "2.28.0.0"
+          }
+        }
+      },
+      "lab4.Contracts/1.0.0": {
+        "runtime": {
+          "lab4.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "lab4/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MongoDB.Bson/2.28.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yiWN3scVV0lYpFXn1CL4PB0BK3KrHFC44qw72+/cBIDS9+r9MQYfxFMxM+pAvnSssAZtQ7ZabCu7z3UOXqKy4w==",
+      "path": "mongodb.bson/2.28.0",
+      "hashPath": "mongodb.bson.2.28.0.nupkg.sha512"
+    },
+    "lab4.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

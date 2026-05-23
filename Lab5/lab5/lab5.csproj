@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>lab5</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.28.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\lab5.Contracts\lab5.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\lab5.Plugin.Motorcycle\lab5.Plugin.Motorcycle.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\lab5.Plugin.Checksum\lab5.Plugin.Checksum.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\lab5.Plugin.SaveTimestamp\lab5.Plugin.SaveTimestamp.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <Target Name="CopyPlugins" AfterTargets="Build">
+    <PropertyGroup>
+      <MotorcyclePluginPath>$(MSBuildThisFileDirectory)..\lab5.Plugin.Motorcycle\bin\$(Configuration)\net9.0\</MotorcyclePluginPath>
+      <ChecksumPluginPath>$(MSBuildThisFileDirectory)..\lab5.Plugin.Checksum\bin\$(Configuration)\net9.0\</ChecksumPluginPath>
+      <TimestampPluginPath>$(MSBuildThisFileDirectory)..\lab5.Plugin.SaveTimestamp\bin\$(Configuration)\net9.0\</TimestampPluginPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <PluginDlls Include="$(MotorcyclePluginPath)lab5.Plugin.Motorcycle.dll" />
+      <PluginDlls Include="$(ChecksumPluginPath)lab5.Plugin.Checksum.dll" />
+      <PluginDlls Include="$(TimestampPluginPath)lab5.Plugin.SaveTimestamp.dll" />
+      <PluginDlls Include="$(MotorcyclePluginPath)lab5.Contracts.dll" />
+      <PluginDlls Include="$(ChecksumPluginPath)lab5.Contracts.dll" />
+      <PluginDlls Include="$(TimestampPluginPath)lab5.Contracts.dll" />
+    </ItemGroup>
+    <MakeDir Directories="$(TargetDir)Plugins" />
+    <Copy SourceFiles="@(PluginDlls)" DestinationFolder="$(TargetDir)Plugins\" SkipUnchangedFiles="true" Condition="Exists('%(PluginDlls.Identity)')" />
+  </Target>
+
+</Project>

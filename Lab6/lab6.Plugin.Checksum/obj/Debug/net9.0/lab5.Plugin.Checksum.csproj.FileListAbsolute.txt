@@ -1,0 +1,15 @@
+e:\University\OOP lab5\lab5.Plugin.Checksum\bin\Debug\net9.0\lab5.Plugin.Checksum.deps.json
+e:\University\OOP lab5\lab5.Plugin.Checksum\bin\Debug\net9.0\lab5.Plugin.Checksum.dll
+e:\University\OOP lab5\lab5.Plugin.Checksum\bin\Debug\net9.0\lab5.Plugin.Checksum.pdb
+e:\University\OOP lab5\lab5.Plugin.Checksum\bin\Debug\net9.0\lab5.Contracts.dll
+e:\University\OOP lab5\lab5.Plugin.Checksum\bin\Debug\net9.0\lab5.Contracts.pdb
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.csproj.AssemblyReference.cache
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.GeneratedMSBuildEditorConfig.editorconfig
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.AssemblyInfoInputs.cache
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.AssemblyInfo.cs
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.csproj.CoreCompileInputs.cache
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plu.FD80C626.Up2Date
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.dll
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\refint\lab5.Plugin.Checksum.dll
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\lab5.Plugin.Checksum.pdb
+e:\University\OOP lab5\lab5.Plugin.Checksum\obj\Debug\net9.0\ref\lab5.Plugin.Checksum.dll

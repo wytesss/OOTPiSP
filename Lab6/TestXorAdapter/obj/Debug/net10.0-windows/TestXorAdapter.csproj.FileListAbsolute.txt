@@ -1,0 +1,4 @@
+d:\University\OOP\OOP lab6\TestXorAdapter\obj\Debug\net10.0-windows\TestXorAdapter.GeneratedMSBuildEditorConfig.editorconfig
+d:\University\OOP\OOP lab6\TestXorAdapter\obj\Debug\net10.0-windows\TestXorAdapter.AssemblyInfoInputs.cache
+d:\University\OOP\OOP lab6\TestXorAdapter\obj\Debug\net10.0-windows\TestXorAdapter.AssemblyInfo.cs
+d:\University\OOP\OOP lab6\TestXorAdapter\obj\Debug\net10.0-windows\TestXorAdapter.csproj.CoreCompileInputs.cache

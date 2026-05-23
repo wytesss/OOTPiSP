@@ -1,0 +1,14 @@
+d:\University\OOP\OOP lab6\InspectFriend\bin\Debug\net9.0\InspectFriend.exe
+d:\University\OOP\OOP lab6\InspectFriend\bin\Debug\net9.0\InspectFriend.deps.json
+d:\University\OOP\OOP lab6\InspectFriend\bin\Debug\net9.0\InspectFriend.runtimeconfig.json
+d:\University\OOP\OOP lab6\InspectFriend\bin\Debug\net9.0\InspectFriend.dll
+d:\University\OOP\OOP lab6\InspectFriend\bin\Debug\net9.0\InspectFriend.pdb
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.GeneratedMSBuildEditorConfig.editorconfig
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.AssemblyInfoInputs.cache
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.AssemblyInfo.cs
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.csproj.CoreCompileInputs.cache
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.dll
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\refint\InspectFriend.dll
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.pdb
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\InspectFriend.genruntimeconfig.cache
+d:\University\OOP\OOP lab6\InspectFriend\obj\Debug\net9.0\ref\InspectFriend.dll

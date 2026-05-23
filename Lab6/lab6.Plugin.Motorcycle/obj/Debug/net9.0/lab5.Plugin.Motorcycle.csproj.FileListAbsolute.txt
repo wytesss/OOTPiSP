@@ -1,0 +1,15 @@
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\bin\Debug\net9.0\lab5.Plugin.Motorcycle.deps.json
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\bin\Debug\net9.0\lab5.Plugin.Motorcycle.dll
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\bin\Debug\net9.0\lab5.Plugin.Motorcycle.pdb
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\bin\Debug\net9.0\lab5.Contracts.dll
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\bin\Debug\net9.0\lab5.Contracts.pdb
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.csproj.AssemblyReference.cache
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.GeneratedMSBuildEditorConfig.editorconfig
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.AssemblyInfoInputs.cache
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.AssemblyInfo.cs
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.csproj.CoreCompileInputs.cache
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plu.0B3FD2E2.Up2Date
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.dll
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\refint\lab5.Plugin.Motorcycle.dll
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\lab5.Plugin.Motorcycle.pdb
+e:\University\OOP lab5\lab5.Plugin.Motorcycle\obj\Debug\net9.0\ref\lab5.Plugin.Motorcycle.dll
